@@ -33,7 +33,15 @@ public class SparkDriverProgram {
     	Dataset<Row> df2 = ss.read().option("header", "true").csv("/home/fbertos/workspace/spark-example-dataset/data.csv");
     	df2.createOrReplaceTempView("OCCUPANCY_RAW2");
     	
-    	Dataset<Row> data = ss.sql("select a.id, b.id FROM OCCUPANCY_RAW a, OCCUPANCY_RAW2 b where a.id = b.id");
+    	//Dataset<Row> data = ss.sql("select a.id, b.id FROM OCCUPANCY_RAW a, OCCUPANCY_RAW2 b where a.id = b.id");
+    	
+    	//Dataset<Row> data = ss.sql("select a.id, b.id FROM OCCUPANCY_RAW a left join OCCUPANCY_RAW2 b on a.id = b.id");
+    	
+    	//Dataset<Row> data = ss.sql("select a.id FROM OCCUPANCY_RAW a where exists (select 1 from OCCUPANCY_RAW2 b where a.id = b.id)");
+    	
+    	//Dataset<Row> data = ss.sql("select a.date, trunc(to_date(a.date), 'year') FROM OCCUPANCY_RAW a where exists (select 1 from OCCUPANCY_RAW2 b where a.id = b.id)");
+    	
+    	Dataset<Row> data = ss.sql("select date_format(to_date(a.date), 'yyyy') FROM OCCUPANCY_RAW a where exists (select 1 from OCCUPANCY_RAW2 b where a.id = b.id)");
     	
     	data.show();
     	
